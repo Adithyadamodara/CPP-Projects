@@ -13,6 +13,19 @@ using namespace std;
 
 /* High Level Architecture of Doubly linked list:
     Head - MRU - - - LRU - Tail 
+    
+    Pointer invariants are the conditions about pointer relationships
+    that must always hold true for a data structure to remain correct,
+    regardless of operations.
+    
+    Head and Tail are sentinel nodes; they never point to an actual node. Hence they exist 
+    the whole time, this eliminates the need to perform repetitive checks for head and tail values. 
+*/
+
+
+/* 
+    Thread Safety is ensured by adding mutex locks in  
+
 */
 
 // Node STructure 
@@ -27,6 +40,7 @@ struct Node{
 
 class LRUCache{
 private:
+    mutex mtx;
     int capacity;
     unordered_map<int, Node*> cache;    
     Node* head;
@@ -70,6 +84,8 @@ public:
     }
 
     int get(int key){
+        lock_guard<mutex> lock(mtx);
+
         if(cache.find(key) == cache.end()) return -1;
         
         Node* node = cache[key];
@@ -79,6 +95,8 @@ public:
     }
 
     void put(int key, int value){
+        lock_guard<mutex> lock(mtx);
+
         if(cache.find(key) != cache.end()){
             Node* node = cache[key];
             node->value = value;    
