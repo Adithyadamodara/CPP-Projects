@@ -24,7 +24,8 @@ using namespace std;
 
 
 /* 
-    Thread Safety is ensured by adding mutex locks in  
+    Thread Safety ensures correct behavior during concurrent access. 
+    This is ensured here by addition of mutex locks. 
 
 */
 
